@@ -417,18 +417,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "rave"
-version = "0.1.0"
-dependencies = [
- "heck",
- "lazy_static",
- "pulldown-cmark",
- "tera",
- "walkdir",
- "yaml-rust",
-]
-
-[[package]]
 name = "regex"
 version = "1.4.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -497,6 +485,18 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b3bc762e6a4b6c6fcaade73e77f9ebc6991b676f88bb2358bddb56560f073373"
 dependencies = [
  "deunicode",
+]
+
+[[package]]
+name = "stark"
+version = "0.1.0"
+dependencies = [
+ "heck",
+ "lazy_static",
+ "pulldown-cmark",
+ "tera",
+ "walkdir",
+ "yaml-rust",
 ]
 
 [[package]]
