@@ -31,7 +31,7 @@
       API Docs
     </a>
     <span> | </span>
-    <a href="https://github.com/mblode/stark/blob/main/.github/CONTRIBUTING.md">
+    <a href="https://github.com/mblode/stark/blob/main/CONTRIBUTING.md">
       Contributing
     </a>
     <span> | </span>
