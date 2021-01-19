@@ -1,6 +1,6 @@
 [package]
 name = "stark"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["Matthew Blode <m@blode.co>"]
 edition = "2018"
 description = "Stark is a blazingly fast static site generator"
@@ -8,7 +8,7 @@ documentation = "https://docs.rs/stark"
 readme = "README.md"
 repository = "https://github.com/mblode/stark/"
 license = "MIT"
-keywords = ["static-site-generator", "static", "jekyll", "hugo", "zola"]
+keywords = ["static-site-generator", "jekyll", "hugo", "zola"]
 categories = ["command-line-utilities"]
 
 [dependencies]
