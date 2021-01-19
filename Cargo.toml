@@ -9,7 +9,7 @@ readme = "README.md"
 repository = "https://github.com/mblode/stark/"
 license = "MIT"
 keywords = ["static-site-generator", "static", "jekyll", "hugo", "zola"]
-categories = ["command-line-utilities", "static-site-generator"]
+categories = ["command-line-utilities"]
 
 [dependencies]
 tera = "1"
