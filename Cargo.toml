@@ -1,10 +1,15 @@
 [package]
-name = "rave"
+name = "stark"
 version = "0.1.0"
 authors = ["Matthew Blode <m@blode.co>"]
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+description = "Stark is a blazingly fast static site generator"
+documentation = "https://docs.rs/stark"
+readme = "README.md"
+repository = "https://github.com/mblode/stark/"
+license = "MIT"
+keywords = ["static-site-generator", "static", "jekyll", "hugo", "zola"]
+categories = ["command-line-utilities", "static-site-generator"]
 
 [dependencies]
 tera = "1"

@@ -1,13 +1,13 @@
+use heck::KebabCase;
+use pulldown_cmark::{html, Options, Parser};
+use std::collections::HashMap;
+use std::ffi::OsStr;
+use std::fs::{self, File};
 use std::io::prelude::*;
 use std::io::Error;
-use std::fs::{self, File};
 use std::path::PathBuf;
-use std::ffi::OsStr;
-use std::collections::HashMap;
-use tera::{Tera, Context};
-use pulldown_cmark::{Parser, Options, html};
+use tera::{Context, Tera};
 use walkdir::{DirEntry, WalkDir};
-use heck::KebabCase;
 
 mod front_matter;
 
@@ -23,8 +23,8 @@ pub struct Site {
 impl Site {
     pub fn new(name: &str) -> Result<Self, Error> {
         let base_dir = Self::create_new_project(name).unwrap();
-        
-         Ok(Site {
+
+        Ok(Site {
             site_name: name.to_string(),
             // base_url: String::from("http:://example.com"),
             base_dir,
@@ -38,15 +38,15 @@ impl Site {
 
         println!("New project in {}", &base_dir);
 
-        fs::create_dir_all(&base_dir)?; 
-        fs::create_dir_all(format!("{}/_includes", &base_dir))?; 
-        fs::create_dir_all(format!("{}/_layouts", &base_dir))?; 
-        fs::create_dir_all(format!("{}/posts", &base_dir))?; 
-        fs::create_dir_all(format!("{}/pages", &base_dir))?; 
-        fs::create_dir_all(format!("{}/assets", &base_dir))?; 
-        fs::create_dir_all(format!("{}/assets/img", &base_dir))?; 
-        fs::create_dir_all(format!("{}/assets/css", &base_dir))?; 
-        fs::create_dir_all(format!("{}/assets/js", &base_dir))?; 
+        fs::create_dir_all(&base_dir)?;
+        fs::create_dir_all(format!("{}/_includes", &base_dir))?;
+        fs::create_dir_all(format!("{}/_layouts", &base_dir))?;
+        fs::create_dir_all(format!("{}/posts", &base_dir))?;
+        fs::create_dir_all(format!("{}/pages", &base_dir))?;
+        fs::create_dir_all(format!("{}/assets", &base_dir))?;
+        fs::create_dir_all(format!("{}/assets/img", &base_dir))?;
+        fs::create_dir_all(format!("{}/assets/css", &base_dir))?;
+        fs::create_dir_all(format!("{}/assets/js", &base_dir))?;
 
         let default_content = "<!DOCTYPE html>\n<html lang=\"en\">\n<head>\n<meta charset=\"utf-8\">\n<title>{{ site_name }}</title>\n</head>\n<body>{{ content }}</body>\n</html>";
         let mut default_layout = File::create(format!("{}/_layouts/default.html", &base_dir))?;
@@ -71,22 +71,22 @@ impl Site {
         self.create_build_folder().unwrap();
         self.render_posts();
         self.render_pages().unwrap();
-    } 
+    }
 
     fn create_build_folder(&self) -> Result<(), Error> {
         let build_dir = format!("{}/public", self.base_dir);
         println!("Building project in {}", build_dir);
 
         fs::create_dir_all(&build_dir)?;
-        fs::create_dir_all(format!("{}/posts", &build_dir))?; 
-        fs::create_dir_all(format!("{}/assets", &build_dir))?; 
-        fs::create_dir_all(format!("{}/assets/img", &build_dir))?; 
-        fs::create_dir_all(format!("{}/assets/css", &build_dir))?; 
-        fs::create_dir_all(format!("{}/assets/js", &build_dir))?; 
+        fs::create_dir_all(format!("{}/posts", &build_dir))?;
+        fs::create_dir_all(format!("{}/assets", &build_dir))?;
+        fs::create_dir_all(format!("{}/assets/img", &build_dir))?;
+        fs::create_dir_all(format!("{}/assets/css", &build_dir))?;
+        fs::create_dir_all(format!("{}/assets/js", &build_dir))?;
 
         Ok(())
     }
-    
+
     fn markdown_to_html(markdown_input: &str) -> String {
         let mut options = Options::empty();
         options.insert(Options::ENABLE_STRIKETHROUGH);
@@ -112,7 +112,8 @@ impl Site {
         context.insert("title", title);
         context.insert("site_name", &self.site_name);
 
-        let post_output = Tera::one_off(markdown_output.as_str(), &context, false).expect("Failed to render template");
+        let post_output = Tera::one_off(markdown_output.as_str(), &context, false)
+            .expect("Failed to render template");
 
         context.insert("content", &post_output);
 
@@ -135,7 +136,8 @@ impl Site {
         context.insert("title", title);
         context.insert("site_name", &self.site_name);
 
-        let page_output = Tera::one_off(content, &context, false).expect("Failed to render template");
+        let page_output =
+            Tera::one_off(content, &context, false).expect("Failed to render template");
 
         context.insert("content", &page_output);
 
@@ -150,7 +152,10 @@ impl Site {
 
         let mut posts: HashMap<PathBuf, String> = HashMap::new();
 
-        for entry in WalkDir::new(input_dir.as_str()).into_iter().filter_map(|e| e.ok()) {
+        for entry in WalkDir::new(input_dir.as_str())
+            .into_iter()
+            .filter_map(|e| e.ok())
+        {
             if entry.metadata().unwrap().is_file() {
                 let post_path = entry.path().to_path_buf();
 
@@ -160,16 +165,15 @@ impl Site {
                         println!("{}", output_path);
 
                         let post_output = Self::render_post(&self, &post_path).unwrap();
-                        
+
                         let mut post = File::create(&output_path)?;
                         post.write_all(post_output.as_bytes())?;
 
-                        posts.insert(post_path, String::from(&output_path)); 
-                    },
+                        posts.insert(post_path, String::from(&output_path));
+                    }
                     None => println!("Oh no."),
                 }
             }
-
         }
 
         self.posts = posts;
@@ -183,7 +187,10 @@ impl Site {
 
         let mut pages: HashMap<PathBuf, String> = HashMap::new();
 
-        for entry in WalkDir::new(input_dir.as_str()).into_iter().filter_map(|e| e.ok()) {
+        for entry in WalkDir::new(input_dir.as_str())
+            .into_iter()
+            .filter_map(|e| e.ok())
+        {
             if entry.metadata().unwrap().is_file() {
                 let page_path = entry.path().to_path_buf();
 
@@ -193,16 +200,15 @@ impl Site {
                         println!("{}", output_path);
 
                         let page_output = Self::render_page(&self, &page_path).unwrap();
-                        
+
                         let mut page_write = File::create(&output_path)?;
                         page_write.write_all(page_output.as_bytes())?;
 
-                        pages.insert(page_path, String::from(&output_path)); 
-                    },
+                        pages.insert(page_path, String::from(&output_path));
+                    }
                     None => println!("Oh no."),
                 }
             }
-
         }
 
         self.pages = pages;
@@ -224,17 +230,19 @@ impl Site {
         match matter {
             Some(matter) => {
                 let nested_layout = matter["layout"].as_str().unwrap();
-                let layout_output = Tera::one_off(content, &context, false).expect("Failed to render template");
+                let layout_output =
+                    Tera::one_off(content, &context, false).expect("Failed to render template");
                 context.insert("content", &layout_output);
                 println!("Calling recursion: {} {}", variant, nested_layout);
-                let layout_output = Self::render_layouts(&self, nested_layout, &mut context).unwrap();
+                let layout_output =
+                    Self::render_layouts(&self, nested_layout, &mut context).unwrap();
                 return Ok(layout_output);
-            },
+            }
             None => println!("Not nested"),
         }
 
-        let layout_output = Tera::one_off(content, &context, false).expect("Failed to render template");
-
+        let layout_output =
+            Tera::one_off(content, &context, false).expect("Failed to render template");
 
         Ok(layout_output)
     }
